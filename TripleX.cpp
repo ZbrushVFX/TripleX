@@ -1,17 +1,20 @@
 #include <iostream>
+#include <ctime>
 
-void PrintIntroduction()
+void PrintIntroduction(int Difficulty)
 {
 // Print welcome message to the terminal
-  std::cout << "\n\n You are a secret agent breaking into a secure server room...\n";
-  std::cout << "Enter the correct code to continue...\n\n";
+  std::cout << "\n\n You are a secret agent breaking into a level " << Difficulty;
+  std::cout << " " << "secure server room...\nEnter the correct code to continue...\n\n";
 }
 
-bool PlayGame()
+bool PlayGame(int Difficulty)
 {
-  const int CodeA = 4;
-  const int CodeB = 3;
-  const int CodeC = 2;
+  PrintIntroduction(Difficulty);
+
+  const int CodeA = rand() % Difficulty + Difficulty;
+  const int CodeB = rand() % Difficulty + Difficulty;
+  const int CodeC = rand() % Difficulty + Difficulty;
 
   const int CodeSum = CodeA + CodeB + CodeC;
   const int CodeProduct = CodeA * CodeB * CodeC;
@@ -31,12 +34,12 @@ bool PlayGame()
   //Check if the players guess is correct
   if (GuessSum == CodeSum && GuessProduct == CodeProduct)
   {
-    std::cout << "\nYou win!";
+    std::cout << "\n*** Well done agent! You have extracted a file! Keep going! ***";
     return true;
   }
   else
   {
-    std::cout << "\nYou lose!";
+    std::cout << "\n*** You entered the wrong code! Careful agent! Try again! ***";
     return false;
   }
 }
@@ -44,16 +47,24 @@ bool PlayGame()
 
 int main()
 {
-  PrintIntroduction();
+  srand(time(NULL));  // create new random sequence based on time day
 
-  while (true)
+  int LevelDifficulty = 1;
+  const int MaxDifficulty = 5;
+
+  while (LevelDifficulty <= MaxDifficulty)  // Loop game until all levels completed
   {
-    bool  bLevelComplete = PlayGame();
+    bool  bLevelComplete = PlayGame(LevelDifficulty);
     std::cin.clear(); // Clear any arrors
     std::cin.ignore(); // Discards the buffer
+
+    if (bLevelComplete)
+    {
+      ++LevelDifficulty;
+    }
   }
 
-  
+  std::cout << "\n*** Great work agent! You got all the files! Now get out of there! ***\n";
   
   return 0;
 }
